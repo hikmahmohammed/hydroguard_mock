@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>HydroGuard Device Data</h2>
+    <ul id="deviceList"></ul>
+    <script>
+      fetch('http://localhost:3000/api/devices')
+        .then(res => {
+          if (!res.ok) throw new Error('Server unreachable');
+          return res.json();
+        })
+        .then(data => {
+          const list = document.getElementById('deviceList');
+          data.forEach(device => {
+            const li = document.createElement('li');
+            li.textContent = `${device.location}: ${device.temperature}°C, Leak: ${device.leak}`;
+            list.appendChild(li);
+          });
+        })
+        .catch(err => {
+          const list = document.getElementById('deviceList');
+          list.innerHTML = `<li style="color:red;">Error loading data: ${err.message}</li>`;
+        });
+    </script>
+  </body>
+</html>
